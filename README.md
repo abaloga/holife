@@ -30,7 +30,7 @@ alongside them.
 - [PWA](#pwa)
 - [Scripts](#scripts)
 - [Production build](#production-build)
-- [Deploying to Cloudflare Pages](#deploying-to-cloudflare-pages)
+- [Deploying to Cloudflare](#deploying-to-cloudflare)
 - [Project structure](#project-structure)
 - [Architecture notes](#architecture-notes)
 - [Testing](#testing)
@@ -350,28 +350,37 @@ so development isn't fighting a cache.
 
 ---
 
-## Deploying to Cloudflare Pages
+## Deploying to Cloudflare
 
-Connect the GitHub repository in the Cloudflare dashboard and use:
+Connect the GitHub repository under **Workers & Pages** in the Cloudflare
+dashboard. This project deploys through Cloudflare's unified Workers product
+(Compute > Workers), not the older standalone Pages product, so the build uses
+a build command and a separate deploy command rather than just an output
+directory:
 
 | Setting | Value |
 | --- | --- |
-| Framework preset | None (or Vite) |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
+| Root directory | `/` |
 | Node version | `20` or newer (`NODE_VERSION` environment variable) |
 
 Then:
 
-1. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as environment variables,
-   for **both** Production and Preview. The build fails without them, on purpose.
-2. Add your Pages domain to the Supabase **Site URL** and redirect allow list.
+1. Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` as build environment
+   variables. The build fails without them, on purpose.
+2. Add your Workers domain to the Supabase **Site URL** and redirect allow list.
 3. Add the same domain to `ALLOWED_ORIGINS` on the Edge Function.
 
-**SPA routing is already handled.** `public/_redirects` ships a
-`/*  /index.html  200` rule, so a hard refresh on a deep link like
-`/weight` serves the app rather than a CDN 404. The service worker's
-`navigateFallback` covers repeat visits; this rule covers the first one.
+**SPA routing is handled by Wrangler, not a `_redirects` file.** The first
+deploy generates `wrangler.jsonc` with `"assets": { "not_found_handling":
+"single-page-application" }`, which serves `index.html` for any path that
+doesn't match a real asset, so a hard refresh on a deep link like `/weight`
+works. Do not add a `public/_redirects` catch-all rule on top of this: a
+`/*  /index.html  200` rule fights the same fallback Wrangler already applies
+and Cloudflare rejects the deploy with "Infinite loop detected in this rule."
+The service worker's `navigateFallback` covers repeat visits; Wrangler's asset
+handling covers the first one.
 
 ---
 

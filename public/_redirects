@@ -1,5 +1,0 @@
-# Cloudflare Pages: serve the SPA shell for client-side routes.
-# Without this, a hard refresh on /track/weight is a 404 from the CDN, because
-# no such file exists in the build. The service worker covers repeat visits;
-# this covers the first one.
-/*    /index.html   200
