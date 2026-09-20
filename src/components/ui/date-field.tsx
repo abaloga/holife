@@ -13,7 +13,7 @@ export interface DateFieldProps extends NativeProps {
 /**
  * The native date input is deliberate: on iOS and Android it opens the system
  * picker, which is faster, fully accessible and more familiar than any custom
- * calendar we could ship — and it costs no bundle weight.
+ * calendar we could ship, and it costs no bundle weight.
  */
 export const DateField = React.forwardRef<HTMLInputElement, DateFieldProps>(function DateField(
   { value, onValueChange, className, ...props },

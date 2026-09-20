@@ -89,7 +89,7 @@ function AuthShell({ children }: { children: React.ReactNode }) {
           <div className="mb-8 text-center">
             <Wordmark size="lg" />
             <p className="mt-2 text-sm text-muted-foreground">
-              Your habits, food, weight and goals — in one calm place.
+              A small collection of apps for your life, in one calm place.
             </p>
           </div>
           {children}

@@ -148,14 +148,14 @@ export function validateImage(file: File): string | null {
     return 'Use a JPEG, PNG, WebP or HEIC image.';
   }
   if (file.size > MAX_IMAGE_BYTES) {
-    return `That image is ${(file.size / 1024 / 1024).toFixed(1)} MB — the limit is 8 MB.`;
+    return `That image is ${(file.size / 1024 / 1024).toFixed(1)} MB. The limit is 8 MB.`;
   }
   return null;
 }
 
 /**
  * Object paths are always `<user_id>/<uuid>.<ext>`, which is exactly what the
- * storage policies key on — a user can only read or write under their own id.
+ * storage policies key on: a user can only read or write under their own id.
  */
 export async function uploadMealImage(userId: string, file: File): Promise<string> {
   const problem = validateImage(file);

@@ -1,8 +1,8 @@
 import { round } from './utils';
 
-/** Whole numbers with thousands separators — calories, steps, counts. */
+/** Whole numbers with thousands separators: calories, steps, counts. */
 export function formatNumber(value: number | null | undefined, decimals = 0): string {
-  if (value == null || !Number.isFinite(value)) return '—';
+  if (value == null || !Number.isFinite(value)) return '-';
   return new Intl.NumberFormat(undefined, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
@@ -11,12 +11,12 @@ export function formatNumber(value: number | null | undefined, decimals = 0): st
 
 /** Macro grams: no decimals above 10 g, one below, so small values stay useful. */
 export function formatGrams(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return '—';
+  if (value == null || !Number.isFinite(value)) return '-';
   return value >= 10 || value === 0 ? formatNumber(round(value)) : formatNumber(value, 1);
 }
 
 export function formatPercent(ratio: number, decimals = 0): string {
-  if (!Number.isFinite(ratio)) return '—';
+  if (!Number.isFinite(ratio)) return '-';
   return `${round(ratio * 100, decimals)}%`;
 }
 

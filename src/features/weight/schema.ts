@@ -19,7 +19,7 @@ export const MAX_WEIGHT_KG = 500;
 export function createWeightFormSchema(unit: WeightUnit) {
   return z
     .object({
-      /** In the user's display unit — stones when the unit is `st`. */
+      /** In the user's display unit: stones when the unit is `st`. */
       weight: requiredNumber('Enter a weight').positive('Enter a weight above zero'),
       /** Only used when the unit is `st`. */
       pounds: z.number().min(0).max(13.9, 'Pounds must be under 14').nullable().default(null),

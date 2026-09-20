@@ -12,7 +12,7 @@ interface ChartContainerProps {
 /**
  * Gives every chart the same box: a fixed height (so nothing reflows while
  * Recharts measures), a consistent surface, and an accessible label. Charts are
- * decorative to assistive tech — the numbers they visualise are always also
+ * decorative to assistive tech, because the numbers they visualise are always also
  * present as text nearby.
  */
 export function ChartContainer({ label, height = 200, className, children }: ChartContainerProps) {

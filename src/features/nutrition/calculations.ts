@@ -40,7 +40,7 @@ export interface MacroProgress {
   key: MacroKey;
   value: number;
   target: number;
-  /** Can exceed 1 — the UI decides how to present going over. */
+  /** Can exceed 1. The UI decides how to present going over. */
   ratio: number;
   /** Negative once the target is passed. */
   remaining: number;

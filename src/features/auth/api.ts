@@ -10,7 +10,7 @@ function authMessage(message: string): string {
     return 'That email and password don’t match an account.';
   }
   if (normalised.includes('email not confirmed')) {
-    return 'Confirm your email address first — check your inbox for the link.';
+    return 'Confirm your email address first. Check your inbox for the link.';
   }
   if (normalised.includes('user already registered')) {
     return 'An account with that email already exists. Try signing in instead.';

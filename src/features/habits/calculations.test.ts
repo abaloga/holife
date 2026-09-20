@@ -51,7 +51,7 @@ describe('currentStreak', () => {
 
   it('does not break the streak just because today is not done yet', () => {
     const completed = new Set(['2025-01-08', '2025-01-09']);
-    // Today (the 10th) is still open — the run of two should stand.
+    // Today (the 10th) is still open, so the run of two should stand.
     expect(currentStreak(daily, completed, '2025-01-10')).toBe(2);
   });
 

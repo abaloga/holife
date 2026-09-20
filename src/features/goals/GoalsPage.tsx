@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { Flag, Plus } from 'lucide-react';
 import { PageBody, PageHeader } from '@/components/layout/page';
-import { SectionTabs } from '@/components/layout/section-tabs';
 import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
 import { ErrorState } from '@/components/common/error-state';
@@ -37,6 +36,7 @@ export function GoalsPage() {
     <>
       <PageHeader
         title="Goals"
+        back="/"
         subtitle={active.length > 0 ? `${active.length} in progress` : undefined}
         action={
           <Button size="sm" onClick={() => setCreateOpen(true)}>
@@ -44,9 +44,7 @@ export function GoalsPage() {
             New
           </Button>
         }
-      >
-        <SectionTabs section="plan" />
-      </PageHeader>
+      />
 
       <PageBody>
         {isLoading && (
@@ -65,7 +63,7 @@ export function GoalsPage() {
           <EmptyState
             icon={Flag}
             title="No goals yet"
-            description="Goals are the outcomes behind the daily stuff — the reason a habit or a task is worth doing."
+            description="Goals are the outcomes behind the daily stuff: the reason a habit or a task is worth doing."
             action={{ label: 'Set a goal', onClick: () => setCreateOpen(true) }}
             className="mt-6"
           />

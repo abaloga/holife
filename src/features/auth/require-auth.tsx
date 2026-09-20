@@ -4,7 +4,7 @@ import { useAuth } from './auth-context';
 
 /**
  * Gate for every application route. While the persisted session is being read
- * the splash holds — redirecting first would sign out anyone reopening the
+ * the splash holds. Redirecting first would sign out anyone reopening the
  * installed app.
  */
 export function RequireAuth({ children }: { children: React.ReactNode }) {

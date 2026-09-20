@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface AnimatedNumberProps {
   value: number;
-  /** Renders the tweened value — keeps unit formatting at the call site. */
+  /** Renders the tweened value, keeping unit formatting at the call site. */
   format?: (value: number) => string;
   decimals?: number;
   durationMs?: number;
@@ -13,7 +13,7 @@ interface AnimatedNumberProps {
 
 /**
  * Counts from the previous value to the new one. Used where a number changing
- * *is* the feedback — daily calories, streak counts, goal progress.
+ * *is* the feedback: daily calories, streak counts, goal progress.
  *
  * Skips straight to the target under `prefers-reduced-motion`, and on first
  * render, so screens do not spin up from zero every time they mount.

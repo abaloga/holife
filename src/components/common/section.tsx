@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 
 interface SectionHeaderProps {
   title: string;
-  /** Short supporting line. Keep it factual — this is not a place for copy. */
+  /** Short supporting line. Keep it factual; this is not a place for copy. */
   meta?: React.ReactNode;
   /** A "see all" destination. Renders the whole header as a link on mobile. */
   to?: string;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-/** True once the window has scrolled past `threshold` — used for header hairlines. */
+/** True once the window has scrolled past `threshold`, for header hairlines. */
 export function useScrolled(threshold = 4): boolean {
   const [scrolled, setScrolled] = useState(false);
 

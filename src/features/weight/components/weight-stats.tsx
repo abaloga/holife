@@ -36,7 +36,7 @@ export function WeightHeadline({
       </p>
       <p className="mt-1 flex items-baseline gap-1.5">
         {unit === 'st' ? (
-          // Stones and pounds is two numbers with two units — render it as text
+          // Stones and pounds is two numbers with two units, so render it as text
           // rather than pretending it is a single tweenable value.
           <span className="tnum text-[2.5rem] font-semibold leading-none tracking-[-0.03em]">
             {formatWeight(headlineKg, unit)}
@@ -76,7 +76,7 @@ interface ChangeGridProps {
 
 /**
  * Period changes are only rendered once there is enough history for them to
- * mean something — an empty slot is more honest than a number built from two
+ * mean something. An empty slot is more honest than a number built from two
  * weigh-ins.
  */
 export function WeightChangeGrid({ summary, unit, className }: ChangeGridProps) {

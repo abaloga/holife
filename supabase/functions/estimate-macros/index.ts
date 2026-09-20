@@ -128,7 +128,7 @@ const SYSTEM_PROMPT = [
   '  "high" only when quantities are explicit (weights, counts, or standard packaged items).',
   '- Keep calories roughly consistent with the macros you give (protein 4 kcal/g, carbs 4 kcal/g, fat 9 kcal/g).',
   '- This is an estimate for personal tracking, not nutritional or medical advice.',
-  '  Do not add disclaimers, warnings or commentary — only fill in the structured fields.',
+  '  Do not add disclaimers, warnings or commentary. Only fill in the structured fields.',
   '- If the input does not describe food at all, return a mealName of "Unknown" with zero values,',
   '  low confidence, and an assumption explaining that no meal could be identified.',
 ].join('\n');

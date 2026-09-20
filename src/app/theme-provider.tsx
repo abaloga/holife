@@ -18,7 +18,7 @@ function readStoredPreference(): ThemePreference {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored === 'light' || stored === 'dark' || stored === 'system') return stored;
   } catch {
-    /* Private mode or blocked storage — fall back to following the OS. */
+    /* Private mode or blocked storage: fall back to following the OS. */
   }
   return 'system';
 }
@@ -61,7 +61,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.setItem(STORAGE_KEY, next);
     } catch {
-      /* Not fatal — the theme still applies for this session. */
+      /* Not fatal: the theme still applies for this session. */
     }
   }, []);
 

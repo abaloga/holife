@@ -1,16 +1,19 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import { AppShell } from '@/components/layout/app-shell';
 import { RequireAuth, Splash } from '@/features/auth/require-auth';
 import { AuthPage } from '@/features/auth/AuthPage';
-import { TodayPage } from '@/features/today/TodayPage';
+import { HomePage } from '@/features/home/HomePage';
 import { PageBody, PageHeader } from '@/components/layout/page';
 import { SkeletonRows } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 
-// Today ships in the main bundle because it is the landing screen. The rest
-// are split, and the service worker precaches the chunks so navigating while
+// Home ships in the main bundle because it is the landing screen. Every app is
+// split, and the service worker precaches the chunks so opening one while
 // offline still works.
+const TodayPage = lazy(() =>
+  import('@/features/today/TodayPage').then((module) => ({ default: module.TodayPage })),
+);
 const WeightPage = lazy(() =>
   import('@/features/weight/WeightPage').then((module) => ({ default: module.WeightPage })),
 );
@@ -28,11 +31,11 @@ const TasksPage = lazy(() =>
 const GoalsPage = lazy(() =>
   import('@/features/goals/GoalsPage').then((module) => ({ default: module.GoalsPage })),
 );
+const MusicPage = lazy(() =>
+  import('@/features/music/MusicPage').then((module) => ({ default: module.MusicPage })),
+);
 const SettingsPage = lazy(() =>
   import('@/features/settings/SettingsPage').then((module) => ({ default: module.SettingsPage })),
-);
-const MorePage = lazy(() =>
-  import('@/features/more/MorePage').then((module) => ({ default: module.MorePage })),
 );
 
 function RouteFallback() {
@@ -52,14 +55,19 @@ function NotFound() {
       <PageHeader title="Not found" back />
       <PageBody>
         <p className="mt-4 text-sm text-muted-foreground">
-          That screen doesn’t exist — it may have moved.
+          That screen doesn’t exist. It may have moved.
         </p>
         <Button asChild className="mt-4">
-          <Link to="/">Back to Today</Link>
+          <Link to="/">Back home</Link>
         </Button>
       </PageBody>
     </>
   );
+}
+
+/** Wraps a split app screen so each one doesn't repeat the Suspense boilerplate. */
+function AppRoute({ children }: { children: React.ReactNode }) {
+  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>;
 }
 
 export function AppRouter() {
@@ -79,66 +87,70 @@ export function AppRouter() {
               </RequireAuth>
             }
           >
-            <Route index element={<TodayPage />} />
+            <Route index element={<HomePage />} />
 
-            <Route path="track" element={<Navigate to="/track/weight" replace />} />
             <Route
-              path="track/weight"
+              path="today"
               element={
-                <Suspense fallback={<RouteFallback />}>
+                <AppRoute>
+                  <TodayPage />
+                </AppRoute>
+              }
+            />
+            <Route
+              path="weight"
+              element={
+                <AppRoute>
                   <WeightPage />
-                </Suspense>
+                </AppRoute>
               }
             />
             <Route
-              path="track/nutrition"
+              path="nutrition"
               element={
-                <Suspense fallback={<RouteFallback />}>
+                <AppRoute>
                   <NutritionPage />
-                </Suspense>
+                </AppRoute>
               }
             />
-
-            <Route path="plan" element={<Navigate to="/plan/habits" replace />} />
             <Route
-              path="plan/habits"
+              path="habits"
               element={
-                <Suspense fallback={<RouteFallback />}>
+                <AppRoute>
                   <HabitsPage />
-                </Suspense>
+                </AppRoute>
               }
             />
             <Route
-              path="plan/tasks"
+              path="tasks"
               element={
-                <Suspense fallback={<RouteFallback />}>
+                <AppRoute>
                   <TasksPage />
-                </Suspense>
+                </AppRoute>
               }
             />
             <Route
-              path="plan/goals"
+              path="goals"
               element={
-                <Suspense fallback={<RouteFallback />}>
+                <AppRoute>
                   <GoalsPage />
-                </Suspense>
+                </AppRoute>
               }
             />
-
             <Route
-              path="more"
+              path="music"
               element={
-                <Suspense fallback={<RouteFallback />}>
-                  <MorePage />
-                </Suspense>
+                <AppRoute>
+                  <MusicPage />
+                </AppRoute>
               }
             />
             <Route
               path="settings"
               element={
-                <Suspense fallback={<RouteFallback />}>
+                <AppRoute>
                   <SettingsPage />
-                </Suspense>
+                </AppRoute>
               }
             />
 

@@ -15,7 +15,7 @@ describe('goalProgress', () => {
   });
 
   it('measures a decreasing goal just as well', () => {
-    // Losing weight from 90 kg to 80 kg, currently 85 kg — halfway.
+    // Losing weight from 90 kg to 80 kg, currently 85 kg, so halfway.
     expect(goalProgress({ start_value: 90, target_value: 80, current_value: 85 })).toBeCloseTo(
       0.5,
       5,

@@ -6,9 +6,9 @@ import { format as formatDate } from 'date-fns';
  *
  * Two representations, and only two:
  *
- *  1. An **instant** — a `Date` / ISO string. This is the real moment something
+ *  1. An **instant**: a `Date` / ISO string. This is the real moment something
  *     happened and is what `timestamptz` columns store.
- *  2. A **date key** — `'yyyy-MM-dd'`. This is the calendar day the user means
+ *  2. A **date key**: `'yyyy-MM-dd'`. This is the calendar day the user means
  *     when they say "today", evaluated in *their* timezone. It is what `date`
  *     columns store.
  *
@@ -184,7 +184,7 @@ export function startOfDayInstant(key: DateKey, timezone: string): Date {
   return zonedDateTimeToInstant(key, '00:00', timezone);
 }
 
-/** UTC instant of local midnight opening the *next* day — an exclusive bound. */
+/** UTC instant of local midnight opening the *next* day: an exclusive bound. */
 export function endOfDayInstant(key: DateKey, timezone: string): Date {
   return startOfDayInstant(addDaysToKey(key, 1), timezone);
 }
@@ -221,7 +221,7 @@ export function relativeDayLabel(key: DateKey, today: DateKey): string {
   return formatDateKey(key, sameYear ? 'EEE d MMM' : 'EEE d MMM yyyy');
 }
 
-/** `'3 days ago' | 'in 2 weeks'` — for target dates and last-logged copy. */
+/** `'3 days ago' | 'in 2 weeks'`, for target dates and last-logged copy. */
 export function relativeDayDistance(key: DateKey, today: DateKey): string {
   const delta = daysBetweenKeys(today, key);
   const magnitude = Math.abs(delta);

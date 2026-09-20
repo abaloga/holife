@@ -23,7 +23,7 @@ export async function fetchSettings(userId: string): Promise<UserSettings> {
   if (parsed.success) return parsed.data;
 
   // A stored timezone the browser no longer recognises should not brick the
-  // app — fall back to the device's, and let the user correct it in settings.
+  // app, so fall back to the device's and let the user correct it in settings.
   return userSettingsSchema.parse({ ...row, timezone: systemTimezone() });
 }
 

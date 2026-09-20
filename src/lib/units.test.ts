@@ -36,7 +36,7 @@ describe('weight conversion', () => {
   });
 
   it('rolls 14 pounds over into the next stone rather than showing "13 st 14 lb"', () => {
-    // 88.885 kg is 195.96 lb — 13 st 13.96 lb, and 13.96 rounds to 14.0.
+    // 88.885 kg is 195.96 lb, so 13 st 13.96 lb, and 13.96 rounds to 14.0.
     const { stones, pounds } = kgToStonesAndPounds(88.885);
     expect(pounds).toBeLessThan(14);
     expect(stones).toBe(14);
@@ -56,9 +56,9 @@ describe('formatWeight', () => {
   });
 
   it('renders an em dash for missing data rather than NaN', () => {
-    expect(formatWeight(null, 'kg')).toBe('—');
-    expect(formatWeight(undefined, 'kg')).toBe('—');
-    expect(formatWeight(Number.NaN, 'kg')).toBe('—');
+    expect(formatWeight(null, 'kg')).toBe('-');
+    expect(formatWeight(undefined, 'kg')).toBe('-');
+    expect(formatWeight(Number.NaN, 'kg')).toBe('-');
   });
 });
 

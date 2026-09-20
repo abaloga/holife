@@ -18,6 +18,7 @@ export type MacroSource = 'manual' | 'ai_estimate';
 export type EstimateConfidence = 'low' | 'medium' | 'high';
 export type HabitFrequency = 'daily' | 'days_of_week';
 export type GoalStatus = 'active' | 'achieved' | 'paused' | 'archived';
+export type MusicFormat = 'cd' | 'cassette';
 
 export interface Database {
   public: {
@@ -350,6 +351,37 @@ export interface Database {
         };
         Relationships: [];
       };
+      music_items: {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          artist: string | null;
+          format: MusicFormat;
+          release_year: number | null;
+          notes: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title: string;
+          artist?: string | null;
+          format: MusicFormat;
+          release_year?: number | null;
+          notes?: string | null;
+        };
+        Update: {
+          title?: string;
+          artist?: string | null;
+          format?: MusicFormat;
+          release_year?: number | null;
+          notes?: string | null;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<never, never>;
     Functions: Record<never, never>;
@@ -362,6 +394,7 @@ export interface Database {
       estimate_confidence: EstimateConfidence;
       habit_frequency: HabitFrequency;
       goal_status: GoalStatus;
+      music_format: MusicFormat;
     };
     CompositeTypes: Record<never, never>;
   };

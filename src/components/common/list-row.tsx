@@ -14,7 +14,7 @@ interface ListRowProps extends React.HTMLAttributes<HTMLDivElement> {
  * The shared row used by habits, tasks, meals and weight history.
  *
  * Rows are separated by hairlines inside one bordered group rather than being
- * individual cards — it reads as a list, keeps density high on a phone, and
+ * individual cards. It reads as a list, keeps density high on a phone, and
  * avoids the "everything in a card" look.
  */
 export function ListRow({

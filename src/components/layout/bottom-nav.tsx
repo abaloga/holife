@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { motion, useReducedMotion } from 'motion/react';
-import { CircleGauge, Ellipsis, Plus, Sun, Target } from 'lucide-react';
+import { LayoutGrid, Plus, Sun } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { transitions } from '@/lib/motion';
 import { useQuickAdd } from '@/features/quick-add/quick-add-context';
@@ -9,45 +9,24 @@ interface NavItem {
   to: string;
   label: string;
   icon: typeof Sun;
-  /** Paths that should also light this tab up. */
-  match: (pathname: string) => boolean;
 }
 
+/**
+ * Only the two shell surfaces live here. Everything else is an app you open
+ * from Home, so the tab bar stays the same size no matter how many apps exist.
+ */
 const ITEMS: NavItem[] = [
-  { to: '/', label: 'Today', icon: Sun, match: (path) => path === '/' },
-  {
-    to: '/track/weight',
-    label: 'Track',
-    icon: CircleGauge,
-    match: (path) => path.startsWith('/track'),
-  },
-  {
-    to: '/plan/habits',
-    label: 'Plan',
-    icon: Target,
-    match: (path) => path.startsWith('/plan'),
-  },
-  {
-    to: '/more',
-    label: 'More',
-    icon: Ellipsis,
-    match: (path) => path.startsWith('/more') || path.startsWith('/settings'),
-  },
+  { to: '/', label: 'Home', icon: LayoutGrid },
+  { to: '/today', label: 'Today', icon: Sun },
 ];
 
-/**
- * Phone navigation. Four destinations plus a central Add action, sized so every
- * target clears 44px and the row sits above the home indicator.
- */
 export function BottomNav() {
   const { pathname } = useLocation();
   const { open } = useQuickAdd();
   const reduceMotion = useReducedMotion();
 
-  const [left, right] = [ITEMS.slice(0, 2), ITEMS.slice(2)];
-
   const renderItem = (item: NavItem) => {
-    const active = item.match(pathname);
+    const active = item.to === '/' ? pathname === '/' : pathname.startsWith(item.to);
     const Icon = item.icon;
 
     return (
@@ -83,7 +62,7 @@ export function BottomNav() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-md items-stretch px-2">
-        {left.map(renderItem)}
+        {renderItem(ITEMS[0])}
 
         <div className="flex w-16 shrink-0 items-center justify-center">
           <button
@@ -100,7 +79,7 @@ export function BottomNav() {
           </button>
         </div>
 
-        {right.map(renderItem)}
+        {renderItem(ITEMS[1])}
       </div>
     </nav>
   );

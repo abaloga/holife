@@ -6,7 +6,7 @@ import { useScrolled } from '@/hooks/use-scrolled';
 
 interface PageHeaderProps {
   title: string;
-  /** A short line under the title — a date, a count, a state. */
+  /** A short line under the title: a date, a count, a state. */
   subtitle?: React.ReactNode;
   /** Shows a back affordance. Pass a path, or `true` for history back. */
   back?: string | true;

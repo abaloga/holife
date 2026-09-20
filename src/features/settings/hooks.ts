@@ -13,7 +13,7 @@ export function useSettings() {
   return useQuery({
     queryKey: queryKeys.settings(userId),
     queryFn: () => fetchSettings(userId),
-    // Settings change rarely and everything depends on them — keep them warm.
+    // Settings change rarely and everything depends on them, so keep them warm.
     staleTime: 5 * 60_000,
   });
 }

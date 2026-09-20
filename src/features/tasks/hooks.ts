@@ -53,7 +53,7 @@ function useInvalidateTasks() {
 }
 
 /**
- * Ticking a task off is optimistic — the row should move the instant it is
+ * Ticking a task off is optimistic: the row should move the instant it is
  * tapped. A failure restores the previous list and surfaces the error.
  */
 export function useToggleTask() {

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { CalendarCheck, Plus } from 'lucide-react';
 import { PageBody, PageHeader } from '@/components/layout/page';
-import { SectionTabs } from '@/components/layout/section-tabs';
 import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
 import { ErrorState } from '@/components/common/error-state';
@@ -35,6 +34,7 @@ export function HabitsPage() {
     <>
       <PageHeader
         title="Habits"
+        back="/"
         subtitle={
           todayViews.length > 0
             ? `${doneToday} of ${todayViews.length} done today`
@@ -46,9 +46,7 @@ export function HabitsPage() {
             New
           </Button>
         }
-      >
-        <SectionTabs section="plan" />
-      </PageHeader>
+      />
 
       <PageBody>
         {isLoading && <SkeletonRows rows={4} className="mt-4" />}

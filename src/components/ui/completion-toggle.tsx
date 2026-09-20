@@ -21,7 +21,7 @@ const SIZES = {
  * The shared "mark it done" control for habits and tasks.
  *
  * The tick draws rather than appears, and a ring pulses outward once on
- * completion — enough to feel earned, short enough not to delay the next tap.
+ * completion: enough to feel earned, short enough not to delay the next tap.
  * The hit area is always at least 32px and usually 44px.
  */
 export function CompletionToggle({

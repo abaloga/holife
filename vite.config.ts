@@ -14,14 +14,14 @@ export default defineConfig({
       manifest: {
         name: 'HoLife',
         short_name: 'HoLife',
-        description: 'A calm, connected home for your daily habits, food, training and goals.',
+        description: 'A calm, connected home for the small apps that run your life.',
         start_url: '/',
         scope: '/',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#0a0a0b',
         theme_color: '#0a0a0b',
-        categories: ['health', 'lifestyle', 'productivity'],
+        categories: ['lifestyle', 'productivity', 'utilities'],
         icons: [
           { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },

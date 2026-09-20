@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Plus, Scale } from 'lucide-react';
 import { PageBody, PageHeader } from '@/components/layout/page';
-import { SectionTabs } from '@/components/layout/section-tabs';
 import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
 import { ErrorState } from '@/components/common/error-state';
@@ -45,6 +44,7 @@ export function WeightPage() {
     <>
       <PageHeader
         title="Weight"
+        back="/"
         subtitle={hasEntries ? `${entries.length} entries logged` : undefined}
         action={
           <Button size="sm" onClick={() => setLogOpen(true)}>
@@ -52,9 +52,7 @@ export function WeightPage() {
             Log
           </Button>
         }
-      >
-        <SectionTabs section="track" />
-      </PageHeader>
+      />
 
       <PageBody>
         {isLoading && <WeightPageSkeleton />}

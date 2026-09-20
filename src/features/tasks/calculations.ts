@@ -1,7 +1,7 @@
 import type { DateKey } from '@/lib/date';
 
 export const PRIORITIES = [
-  { value: 0, label: 'None', short: '—' },
+  { value: 0, label: 'None', short: '-' },
   { value: 1, label: 'Low', short: 'Low' },
   { value: 2, label: 'Medium', short: 'Med' },
   { value: 3, label: 'High', short: 'High' },
@@ -29,7 +29,7 @@ export type TaskBucket = 'overdue' | 'today' | 'upcoming' | 'someday';
 
 /**
  * Which list a task belongs in. Anything undated is "someday" rather than being
- * pushed into today — an inbox of undated items should not masquerade as work
+ * pushed into today. An inbox of undated items should not masquerade as work
  * that is due.
  */
 export function bucketFor(task: TaskLike, today: DateKey): TaskBucket {

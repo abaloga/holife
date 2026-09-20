@@ -18,7 +18,7 @@ export const macroEstimateSchema = z.object({
   carbohydrateGrams: z.number().finite().min(0).max(2000),
   fatGrams: z.number().finite().min(0).max(2000),
   confidence: estimateConfidenceSchema,
-  /** Short, concrete statements about what was assumed — portion sizes, oils. */
+  /** Short, concrete statements about what was assumed: portion sizes, oils. */
   assumptions: z.array(z.string().trim().min(1).max(240)).max(8).default([]),
   /** Optional breakdown, shown so the user can see what was actually counted. */
   components: z

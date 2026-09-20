@@ -105,7 +105,7 @@ export function TargetsForm({ onDone }: { onDone: () => void }) {
 
       <p className="text-xs text-muted-foreground">
         Those macros add up to {formatNumber(Math.round(impliedCalories))} kcal. They don’t have to
-        match your calorie target exactly — HoLife tracks them independently.
+        match your calorie target exactly. HoLife tracks them independently.
       </p>
 
       <Button type="submit" loading={form.formState.isSubmitting} block>

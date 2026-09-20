@@ -29,7 +29,7 @@ function supportedTimezones(): string[] {
     const zones = withSupport.supportedValuesOf?.('timeZone');
     if (zones && zones.length > 0) return zones;
   } catch {
-    /* Older engines — fall through. */
+    /* Older engines: fall through. */
   }
   return [systemTimezone(), 'UTC'];
 }
@@ -83,7 +83,7 @@ export function SettingsPage() {
   const handleSignOut = () => {
     confirm({
       title: 'Sign out?',
-      description: 'Your data stays safe — you can sign back in any time.',
+      description: 'Your data stays safe. You can sign back in any time.',
       confirmLabel: 'Sign out',
       onConfirm: async () => {
         try {
@@ -100,7 +100,7 @@ export function SettingsPage() {
   if (!settings) {
     return (
       <>
-        <PageHeader title="Settings" />
+        <PageHeader title="Settings" back="/" />
         <PageBody>
           <ErrorState error={null} subject="your settings" />
         </PageBody>
@@ -110,7 +110,7 @@ export function SettingsPage() {
 
   return (
     <>
-      <PageHeader title="Settings" />
+      <PageHeader title="Settings" back="/" />
 
       <PageBody>
         <Section>
@@ -143,7 +143,7 @@ export function SettingsPage() {
               <SegmentedControl
                 value={settings.theme}
                 onValueChange={(value: ThemePreference) => {
-                  // Apply immediately, then persist — the toggle should not
+                  // Apply immediately, then persist, because the toggle should not
                   // wait on a round trip.
                   setPreference(value);
                   void patch({ theme: value });
@@ -296,7 +296,7 @@ export function SettingsPage() {
 function SettingsSkeleton() {
   return (
     <>
-      <PageHeader title="Settings" />
+      <PageHeader title="Settings" back="/" />
       <PageBody>
         <div className="mt-2 space-y-6">
           {Array.from({ length: 3 }).map((_, index) => (

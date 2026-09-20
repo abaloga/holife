@@ -5,7 +5,7 @@ import { z } from 'zod';
  *
  * The numeric controls in this app hold `number | null` rather than a string,
  * so an empty field arrives as `null`. Zod reports that as a *type* error by
- * default, which would surface as "Expected number, received null" — these
+ * default, which would surface as "Expected number, received null". These
  * wrappers make the message say what the user should actually do.
  */
 export function requiredNumber(message: string) {

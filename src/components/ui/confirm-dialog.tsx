@@ -16,7 +16,7 @@ export interface ConfirmDialogProps {
 
 /**
  * Used for anything that discards data. Deliberately a centred alert on every
- * size — a destructive choice should not be dismissible by a stray swipe.
+ * size, because a destructive choice should not be dismissible by a stray swipe.
  */
 export function ConfirmDialog({
   open,

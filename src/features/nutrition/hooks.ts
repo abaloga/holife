@@ -121,7 +121,7 @@ export function useDeleteMeal() {
   });
 }
 
-/** The current day's totals — used by Today without duplicating the maths. */
+/** The current day's totals, used by Today without duplicating the maths. */
 export function useTodayNutrition() {
   const { today } = usePreferences();
   return useDayNutrition(today);

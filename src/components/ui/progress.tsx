@@ -6,7 +6,7 @@ interface ProgressBarProps {
   value: number;
   max: number;
   className?: string;
-  /** Any Tailwind background utility — module colours live at the call site. */
+  /** Any Tailwind background utility. App colours live at the call site. */
   indicatorClassName?: string;
   size?: 'sm' | 'default' | 'lg';
   /** Marks the portion beyond `max` in a muted overflow colour. */
@@ -55,7 +55,7 @@ interface ProgressRingProps {
   size?: number;
   strokeWidth?: number;
   className?: string;
-  /** A CSS colour — usually `var(--chart-n)`. */
+  /** A CSS colour, usually `var(--chart-n)`. */
   color?: string;
   trackClassName?: string;
   children?: React.ReactNode;

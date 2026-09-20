@@ -13,7 +13,7 @@ const AuthContext = React.createContext<AuthContextValue | null>(null);
 
 /**
  * Holds the Supabase session. Everything downstream can assume that once
- * `initialising` is false, `user` is either a real signed-in user or null —
+ * `initialising` is false, `user` is either a real signed-in user or null,
  * which is what lets protected routes redirect without flashing.
  */
 export function AuthProvider({ children }: { children: React.ReactNode }) {

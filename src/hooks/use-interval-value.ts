@@ -25,7 +25,7 @@ export function useIntervalValue<T>(compute: () => T, intervalMs: number): T {
       window.clearInterval(id);
       document.removeEventListener('visibilitychange', onVisible);
     };
-    // `compute` must be stable — callers memoise it, which is why re-running on
+    // `compute` must be stable. Callers memoise it, which is why re-running on
     // its identity is correct rather than something to suppress.
   }, [intervalMs, compute]);
 

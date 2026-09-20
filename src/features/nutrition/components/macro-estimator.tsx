@@ -21,7 +21,7 @@ interface MacroEstimatorProps {
 }
 
 const CONFIDENCE_COPY: Record<EstimateConfidence, string> = {
-  low: 'Low confidence — portions are a guess',
+  low: 'Low confidence: portions are a guess',
   medium: 'Moderate confidence',
   high: 'Reasonable confidence',
 };
@@ -98,7 +98,7 @@ export function MacroEstimator({ initialDescription, onEstimate, onCancel }: Mac
       <Field
         label="Describe the meal"
         htmlFor="estimate-description"
-        hint="Include portions where you know them — “two eggs, half an avocado, one slice of sourdough”."
+        hint="Include portions where you know them: “two eggs, half an avocado, one slice of sourdough”."
         error={error ?? undefined}
       >
         <Textarea
@@ -193,7 +193,7 @@ export function EstimateNotice({
         <div className="min-w-0 flex-1">
           <p className="font-medium">These numbers are an estimate</p>
           <p className="mt-0.5 text-muted-foreground">
-            Check them before saving — portion sizes and hidden fats are guesswork.
+            Check them before saving. Portion sizes and hidden fats are guesswork.
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <Badge variant="accent">{CONFIDENCE_COPY[confidence]}</Badge>

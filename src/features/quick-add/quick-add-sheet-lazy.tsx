@@ -2,7 +2,7 @@ import { lazy, Suspense, useEffect } from 'react';
 import { useQuickAdd } from './quick-add-context';
 
 /**
- * Every add form — weight, meal (including the estimator), habit, task — lives
+ * Every add form (weight, meal including the estimator, habit, task) lives
  * behind this boundary. Together they are a meaningful slice of the bundle, and
  * none of it is needed to render a screen.
  *

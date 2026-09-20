@@ -61,7 +61,7 @@ export function formatWeight(
   unit: WeightUnit,
   options: { withUnit?: boolean; decimals?: number } = {},
 ): string {
-  if (kg == null || !Number.isFinite(kg)) return '—';
+  if (kg == null || !Number.isFinite(kg)) return '-';
   const { withUnit = true, decimals = 1 } = options;
 
   if (unit === 'st') {

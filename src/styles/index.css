@@ -8,7 +8,7 @@
    Foundation: a cool-leaning neutral ramp. Interaction: "ink" (near-black in
    light, near-white in dark) so primary actions feel typographic rather than
    branded. Signal: a single warm accent reserved for progress, streaks, focus
-   and live data — never used as wallpaper.
+   and live data, never used as wallpaper.
 --------------------------------------------------------------------------- */
 
 :root {
@@ -228,7 +228,7 @@
     overscroll-behavior-y: none;
   }
 
-  /* Numbers in the product are data — align them. */
+  /* Numbers in the product are data, so align them. */
   .tnum,
   table,
   time {

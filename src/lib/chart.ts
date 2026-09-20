@@ -2,7 +2,7 @@
  * Chart vocabulary shared by every module.
  *
  * The categorical hues are assigned in a fixed order and are never cycled or
- * reassigned when a series is filtered out — a macro keeps its colour whether
+ * reassigned when a series is filtered out, so a macro keeps its colour whether
  * it is shown next to three others or on its own.
  */
 

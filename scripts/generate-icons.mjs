@@ -5,7 +5,7 @@
  *   node scripts/generate-icons.mjs
  *
  * The mark is a typographic "H" with the accent dot from the wordmark, drawn
- * directly into an RGBA buffer and encoded as PNG with zlib — no image
+ * directly into an RGBA buffer and encoded as PNG with zlib, with no image
  * dependencies, nothing binary checked in that cannot be rebuilt.
  */
 import { deflateSync } from 'node:zlib';
@@ -157,7 +157,7 @@ function drawIcon(size, { maskable = false } = {}) {
   const bar = markHeight * 0.2;
   const radius = stem * 0.28;
 
-  // Two stems and a crossbar — an "H" built from the same geometry as the UI.
+  // Two stems and a crossbar: an "H" built from the same geometry as the UI.
   roundedRect(canvas, left, top, stem, markHeight, radius, PAPER);
   roundedRect(canvas, left + markWidth - stem, top, stem, markHeight, radius, PAPER);
   roundedRect(

@@ -11,7 +11,7 @@ import { useIsDesktop } from '@/hooks/use-media-query';
  *
  * On a phone it is a native-feeling bottom sheet (drag to dismiss, sized to its
  * content, inputs repositioned above the keyboard). From `md` up it becomes a
- * centred dialog. Callers never choose — they just render a `Sheet`.
+ * centred dialog. Callers never choose; they just render a `Sheet`.
  */
 export interface SheetProps {
   open: boolean;
@@ -20,7 +20,7 @@ export interface SheetProps {
   description?: string;
   /** Keeps the title for screen readers but removes it from the layout. */
   hideHeader?: boolean;
-  /** Pinned below the scroll area — where primary actions belong on a phone. */
+  /** Pinned below the scroll area, where primary actions belong on a phone. */
   footer?: React.ReactNode;
   children: React.ReactNode;
   className?: string;

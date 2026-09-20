@@ -57,6 +57,6 @@ export function clearPersistedCache() {
   try {
     window.localStorage.removeItem(PERSIST_KEY);
   } catch {
-    /* Storage unavailable — the in-memory clear above is still enough. */
+    /* Storage unavailable: the in-memory clear above is still enough. */
   }
 }

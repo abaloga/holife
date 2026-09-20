@@ -7,7 +7,7 @@ export interface WeightSample {
 }
 
 export interface TrendPoint extends WeightSample {
-  /** Exponentially smoothed weight — the line the user should actually read. */
+  /** Exponentially smoothed weight: the line the user should actually read. */
   trendKg: number;
 }
 
@@ -66,7 +66,7 @@ export function buildTrend(samples: WeightSample[], halfLifeDays = 10): TrendPoi
 export interface PeriodChange {
   /** Kilograms, signed. Negative means the trend went down. */
   deltaKg: number;
-  /** Days actually covered — may be shorter than requested. */
+  /** Days actually covered, which may be shorter than requested. */
   spanDays: number;
 }
 

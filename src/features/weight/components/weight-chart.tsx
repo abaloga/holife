@@ -29,7 +29,7 @@ interface WeightChartProps {
 
 /**
  * The trend line is the subject; individual weigh-ins are secondary marks
- * behind it. That ordering is the whole point — a day's reading is noise, and
+ * behind it. That ordering is the whole point: a day's reading is noise, and
  * drawing it as the primary line would invite the user to read noise as change.
  */
 export function WeightChart({ points, unit, goalWeightKg, rangeDays, today }: WeightChartProps) {

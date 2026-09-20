@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight, Plus, SlidersHorizontal, UtensilsCrossed } from 'lucide-react';
 import { PageBody, PageHeader } from '@/components/layout/page';
-import { SectionTabs } from '@/components/layout/section-tabs';
 import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
 import { ErrorState } from '@/components/common/error-state';
@@ -32,6 +31,7 @@ export function NutritionPage() {
     <>
       <PageHeader
         title="Nutrition"
+        back="/"
         action={
           <>
             <Button
@@ -49,10 +49,7 @@ export function NutritionPage() {
           </>
         }
       >
-        <div className="space-y-2.5">
-          <SectionTabs section="track" />
-          <DayNavigator date={date} today={today} onChange={setDate} />
-        </div>
+        <DayNavigator date={date} today={today} onChange={setDate} />
       </PageHeader>
 
       <PageBody>
@@ -80,7 +77,7 @@ export function NutritionPage() {
                   description={
                     isFuture
                       ? 'You can log ahead if you are planning meals.'
-                      : 'Add what you ate — or describe it and let HoLife estimate the macros for you to check.'
+                      : 'Add what you ate, or describe it and let HoLife estimate the macros for you to check.'
                   }
                   action={{ label: 'Add a meal', onClick: () => setAddOpen(true) }}
                 />

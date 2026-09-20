@@ -5,10 +5,10 @@ import { App } from './App';
 /**
  * A boot canary rather than a UI test.
  *
- * It asserts one thing the logic tests cannot: that the whole provider stack —
- * error boundary, query client with its storage persister, theme, auth, router
- * — mounts and resolves to a real screen. A broken context, a bad hook order or
- * a missing provider fails here instead of in the browser.
+ * It asserts one thing the logic tests cannot: that the whole provider stack
+ * (error boundary, query client with its storage persister, theme, auth,
+ * router) mounts and resolves to a real screen. A broken context, a bad hook
+ * order or a missing provider fails here instead of in the browser.
  */
 describe('App', () => {
   it('boots and shows the sign-in screen when nobody is signed in', async () => {

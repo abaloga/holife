@@ -322,7 +322,7 @@ export function MealForm({ meal, onDone }: MealFormProps) {
       {showDiscrepancy && discrepancy != null && (
         <p className="text-xs text-muted-foreground">
           The macros above work out to about {formatNumber(totals.calories - discrepancy)} kcal.
-          That’s fine if the calorie figure came from a label — just worth a look.
+          That’s fine if the calorie figure came from a label, just worth a look.
         </p>
       )}
 

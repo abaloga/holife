@@ -3,7 +3,7 @@ import { z } from 'zod';
 /**
  * Client environment. Anything readable here ships to the browser, so it may
  * only ever contain publishable values. Server secrets (service role key,
- * OpenAI key) belong in Supabase Edge Function secrets — never in `VITE_*`.
+ * OpenAI key) belong in Supabase Edge Function secrets, never in `VITE_*`.
  */
 const clientEnvSchema = z.object({
   VITE_SUPABASE_URL: z.string().url('VITE_SUPABASE_URL must be a full URL, e.g. https://xyz.supabase.co'),

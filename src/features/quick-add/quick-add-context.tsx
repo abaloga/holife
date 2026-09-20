@@ -1,9 +1,8 @@
 import * as React from 'react';
 
 /**
- * Add one entry here and one entry in `QUICK_ADD_ACTIONS` to put a new action
- * on the central Add button — workouts, water, measurements and journal
- * entries are all expected to arrive this way.
+ * Add one entry here and one entry in `QUICK_ADD_ACTIONS` to put a new app's
+ * add action on the central button.
  */
 export type QuickAddAction = 'weight' | 'meal' | 'habit' | 'task';
 

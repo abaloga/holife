@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { CircleCheckBig, Plus } from 'lucide-react';
 import { PageBody, PageHeader } from '@/components/layout/page';
-import { SectionTabs } from '@/components/layout/section-tabs';
 import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
 import { ErrorState } from '@/components/common/error-state';
@@ -50,6 +49,7 @@ export function TasksPage() {
     <>
       <PageHeader
         title="Tasks"
+        back="/"
         subtitle={groups.openCount > 0 ? `${groups.openCount} open` : undefined}
         action={
           <Button size="sm" onClick={() => setCreateOpen(true)}>
@@ -58,23 +58,20 @@ export function TasksPage() {
           </Button>
         }
       >
-        <div className="space-y-2.5">
-          <SectionTabs section="plan" />
-          <SegmentedControl
-            value={view}
-            onValueChange={setView}
-            aria-label="Task view"
-            options={[
-              { value: 'today', label: 'Today', badge: groups.dueTodayCount },
-              {
-                value: 'upcoming',
-                label: 'Upcoming',
-                badge: groups.upcoming.length + groups.someday.length,
-              },
-              { value: 'completed', label: 'Done' },
-            ]}
-          />
-        </div>
+        <SegmentedControl
+          value={view}
+          onValueChange={setView}
+          aria-label="Task view"
+          options={[
+            { value: 'today', label: 'Today', badge: groups.dueTodayCount },
+            {
+              value: 'upcoming',
+              label: 'Upcoming',
+              badge: groups.upcoming.length + groups.someday.length,
+            },
+            { value: 'completed', label: 'Done' },
+          ]}
+        />
       </PageHeader>
 
       <PageBody>

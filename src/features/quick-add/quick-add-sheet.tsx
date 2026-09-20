@@ -22,9 +22,9 @@ interface ActionDefinition {
 }
 
 /**
- * The central Add button's menu. Adding a future action (workout, water,
- * measurement, journal) means one entry here, one case in the switch below and
- * one entry in `QuickAddAction`.
+ * The central Add button's menu: the one thing each app is most often opened
+ * to do. A new app joins by adding one entry here, one branch below and one
+ * entry in `QuickAddAction`.
  */
 const QUICK_ADD_ACTIONS: ActionDefinition[] = [
   { id: 'weight', label: 'Weight', hint: 'Log a weigh-in', icon: Scale, tone: 'text-chart-2' },

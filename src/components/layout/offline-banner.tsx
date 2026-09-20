@@ -23,7 +23,7 @@ export function OfflineBanner() {
         >
           <p className="page-x flex items-center justify-center gap-2 py-1.5 text-xs text-subtle-foreground">
             <CloudOff className="size-3.5" aria-hidden />
-            Offline — showing your last synced data
+            Offline, showing your last synced data
           </p>
         </motion.div>
       )}

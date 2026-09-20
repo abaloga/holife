@@ -38,6 +38,11 @@ export const queryKeys = {
     root: (userId: string) => ['goals', userId] as const,
     list: (userId: string) => ['goals', userId, 'list'] as const,
   },
+
+  music: {
+    root: (userId: string) => ['music', userId] as const,
+    list: (userId: string) => ['music', userId, 'list'] as const,
+  },
 } as const;
 
 /** Window of habit history the app keeps warm: enough for streaks and a heatmap. */

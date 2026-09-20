@@ -1,12 +1,14 @@
 # HoLife
 
-A holistic lifestyle app: weight, food, habits, tasks and goals in one place, built
+Many small apps in one: open the launcher, pick an app, do the thing. Built
 mobile-first as an installable PWA.
 
-The point of HoLife is not that it tracks several things. It's that the things it
-tracks share one context — the same day boundary, the same units, the same account,
-one database — so that later they can say something together that none of them can
-say alone.
+The point of HoLife is not the particular apps it ships with. It's that whatever
+you add shares one context (the same day boundary, the same units, the same
+account, one database) so that later they can say something together that none
+of them can say alone. Today it holds health and planning apps; nothing in the
+shell assumes that, and creative tools and small games are expected to sit
+alongside them.
 
 > "HoLife" is a working name. It lives in `VITE_APP_NAME` and
 > `src/components/common/wordmark.tsx`; nothing else in the codebase depends on it.
@@ -40,20 +42,35 @@ say alone.
 
 Implemented and working:
 
-| Module | What it does |
-| --- | --- |
-| **Today** | Greeting, date, weight trend, macro progress, today's habits and tasks, goal progress, quick add |
-| **Weight** | Fast logging, smoothed trend chart, period changes, goal weight, full history |
-| **Nutrition** | Meals with calories and macros, per-day targets, photos, optional macro estimation |
-| **Habits** | Daily or day-of-week habits, one-tap completion, streaks, weekly and 90-day stats |
-| **Tasks** | Today / Upcoming / Completed, due dates and times, priorities |
-| **Goals** | Outcomes with optional numeric targets and progress |
-| **Settings** | Name, units, weight unit, theme, timezone, week start, goal weight |
+Two shell surfaces, which are not apps:
 
-Not built yet, by design: workouts, body measurements, progress photos, water,
-sleep, mood, journal, routines, calendar, cross-module analytics, Apple Health.
-The schema, module registry and navigation are shaped so these slot in without a
-rewrite — see [Architecture notes](#architecture-notes).
+| Surface | What it does |
+| --- | --- |
+| **Home** (`/`) | The launcher: greeting, a strip of whatever is due across apps, and the app grid by category |
+| **Today** (`/today`) | One day across every app, assembled from widgets the apps contribute |
+
+The apps themselves:
+
+| App | Category | What it does |
+| --- | --- | --- |
+| **Weight** | Health | Fast logging, smoothed trend chart, period changes, goal weight, full history |
+| **Nutrition** | Health | Meals with calories and macros, per-day targets, photos, optional macro estimation |
+| **Habits** | Productivity | Daily or day-of-week habits, one-tap completion, streaks, weekly and 90-day stats |
+| **Tasks** | Productivity | Today / Upcoming / Completed, due dates and times, priorities |
+| **Goals** | Productivity | Outcomes with optional numeric targets and progress |
+| **Music** | Creative | The CDs and cassettes you own, filterable by format |
+| **Settings** | System | Name, units, weight unit, theme, timezone, week start, goal weight |
+
+Music is the first app that contributes no Today widget and no Home summary
+pill, because a shelf of CDs has nothing to say about a particular day. Both
+surfaces are optional and it simply does not register them.
+
+The `play` category exists in the registry and is empty. It renders nothing
+until an app claims it.
+
+Not built yet: everything else. The schema, app registry and navigation are
+shaped so a new app slots in without a rewrite. See
+[Architecture notes](#architecture-notes).
 
 ---
 
@@ -65,7 +82,7 @@ rewrite — see [Architecture notes](#architecture-notes).
 | Build | Vite 6 |
 | Styling | Tailwind CSS v4 (CSS-first config, no `tailwind.config.js`) |
 | Components | Radix primitives + shadcn/ui conventions, hand-assembled |
-| Backend | Supabase — Postgres, Auth, Storage, Edge Functions, RLS |
+| Backend | Supabase: Postgres, Auth, Storage, Edge Functions, RLS |
 | Server data | TanStack Query (+ localStorage persistence for offline reads) |
 | Forms | React Hook Form + Zod |
 | Motion | Motion (Framer Motion) |
@@ -84,7 +101,7 @@ Function, and it exists solely because an API key must not reach the browser.
 
 - **Node.js 20 or newer** (built and tested on 24)
 - **npm 10+**
-- A **Supabase** project — free tier is enough
+- A **Supabase** project (free tier is enough)
 - Optional: the [Supabase CLI](https://supabase.com/docs/guides/cli) for running
   migrations and deploying the Edge Function
 - Optional: an **OpenAI API key**, only for macro estimation
@@ -103,7 +120,7 @@ npm run dev              # http://localhost:5173
 ```
 
 The app refuses to start with a clear message if the environment is missing or
-malformed — see `src/lib/env.ts`.
+malformed. See `src/lib/env.ts`.
 
 To develop against a local Supabase stack instead of a hosted project:
 
@@ -121,7 +138,7 @@ supabase status          # copy the API URL and anon key into .env
 | Variable | Required | What it is |
 | --- | --- | --- |
 | `VITE_SUPABASE_URL` | yes | Project URL, e.g. `https://abcd.supabase.co` |
-| `VITE_SUPABASE_ANON_KEY` | yes | Publishable anon key. Safe in the bundle — RLS is what protects the data |
+| `VITE_SUPABASE_ANON_KEY` | yes | Publishable anon key. Safe in the bundle; RLS is what protects the data |
 | `VITE_APP_NAME` | no | Product name in the wordmark and title. Defaults to `HoLife` |
 
 **Everything prefixed `VITE_` is compiled into the JavaScript that ships to
@@ -135,7 +152,7 @@ environment:
 | `ALLOWED_ORIGINS` | recommended | Comma-separated origins allowed to call the function. Unset means any origin |
 
 `SUPABASE_URL` and `SUPABASE_ANON_KEY` are injected into Edge Functions by the
-platform — do not set those yourself. The service role key is not used anywhere
+platform, so do not set those yourself. The service role key is not used anywhere
 in this project.
 
 ---
@@ -143,8 +160,8 @@ in this project.
 ## Supabase setup
 
 1. Create a project at [supabase.com](https://supabase.com).
-2. **Project Settings → Data API** — copy the Project URL into `VITE_SUPABASE_URL`.
-3. **Project Settings → API Keys** — copy the `anon` / `public` key into
+2. **Project Settings → Data API**: copy the Project URL into `VITE_SUPABASE_URL`.
+3. **Project Settings → API Keys**: copy the `anon` / `public` key into
    `VITE_SUPABASE_ANON_KEY`.
 4. Apply the migrations (below). They create every table, index, constraint, RLS
    policy, the storage bucket and its policies, and the new-user trigger.
@@ -162,13 +179,15 @@ supabase link --project-ref <your-project-ref>
 ## Database migrations
 
 Migrations live in `supabase/migrations/` and are checked into source control.
-They are the only place the schema is defined — nothing is created by hand in the
+They are the only place the schema is defined. Nothing is created by hand in the
 dashboard.
 
 | File | What it creates |
 | --- | --- |
 | `20260917120000_init.sql` | Enums, helper functions, all eight tables, indexes, constraints, `updated_at` triggers, the new-user bootstrap trigger, and RLS policies |
 | `20260917120100_storage.sql` | The private `meal-images` bucket and its per-user access policies |
+| `20260920120000_grants.sql` | Table privileges for `authenticated`. RLS decides which rows a role may touch, not whether it may touch the table at all; without these grants PostgREST rejects every request with 42501 before any policy runs |
+| `20260920130000_music.sql` | The `music_format` enum (`cd`, `cassette`), the `music_items` table, its index, trigger, RLS policies and grants |
 
 ```bash
 supabase db push           # apply to the linked hosted project
@@ -189,7 +208,8 @@ Or paste each file into the dashboard SQL editor, in filename order.
 | `habits` | Daily or day-of-week, icon, active flag |
 | `habit_completions` | One row per habit per local day (unique constraint) |
 | `tasks` | Due date/time, priority, completion, recurrence column reserved |
-| `goals` | Status, optional start/current/target values, `metric_key` reserved for cross-module links |
+| `goals` | Status, optional start/current/target values, `metric_key` reserved for cross-app links |
+| `music_items` | Title, optional artist and year, and a required `cd` / `cassette` format |
 
 Every user-owned table has `user_id`, `created_at`, `updated_at`, RLS enabled, and
 four owner-only policies. `habit_completions` additionally carries a restrictive
@@ -215,15 +235,15 @@ what an installed PWA needs.
 
 In the dashboard, under **Authentication**:
 
-1. **Providers → Email** — enable it. Decide whether to require email
+1. **Providers → Email**: enable it. Decide whether to require email
    confirmation. The sign-up screen handles both: if no session comes back it
    shows a "check your email" state.
-2. **URL Configuration** — set the Site URL to your deployed origin, and add
+2. **URL Configuration**: set the Site URL to your deployed origin, and add
    `http://localhost:5173` to the redirect allow list for local development.
    Password reset and email confirmation links both depend on this.
 
 New accounts are bootstrapped by the `handle_new_user` trigger, which creates the
-profile, settings and nutrition targets rows — seeding the display name and
+profile, settings and nutrition targets rows, seeding the display name and
 timezone captured at sign-up, so the first screen is already correct.
 
 ---
@@ -232,7 +252,7 @@ timezone captured at sign-up, so the first screen is already correct.
 
 The `meal-images` bucket is created by `20260917120100_storage.sql`:
 
-- **private** — images are served through short-lived signed URLs, never public
+- **private**: images are served through short-lived signed URLs, never public
 - **8 MB** limit, enforced at the bucket, in the browser, and in the Edge Function
 - JPEG, PNG, WebP, HEIC and HEIF only
 - object names are always `<user_id>/<uuid>.<ext>`, which is exactly what the
@@ -261,11 +281,11 @@ supabase functions deploy estimate-macros
 The function:
 
 - requires a valid JWT (`verify_jwt = true`, plus an explicit `getUser()` check)
-- throttles per user — 6/minute and 60/hour, in-instance and best-effort, so an
+- throttles per user at 6/minute and 60/hour, in-instance and best-effort, so an
   abusive client can't trivially run up a bill
 - asks for structured output against a strict JSON schema
 - validates the reply with Zod **server-side**, then again **client-side** before
-  it touches application state — a malformed estimate is discarded, not shown
+  it touches application state; a malformed estimate is discarded, not shown
 - degrades honestly: if `OPENAI_API_KEY` is unset it says so, and manual entry
   keeps working
 
@@ -286,11 +306,11 @@ node scripts/generate-icons.mjs     # rewrites public/icons/*
 Offline behaviour in this first version:
 
 - the app opens and the shell and navigation work with no network
-- previously fetched data stays visible — the TanStack Query cache is persisted
+- previously fetched data stays visible, because the TanStack Query cache is persisted
   to `localStorage` for 24 hours and served offline-first
 - an offline banner explains why data may be stale
 - mutations are paused while offline and replay on reconnect
-- updates are **offered**, not forced — reloading underneath someone mid-entry
+- updates are **offered**, not forced, because reloading underneath someone mid-entry
   would lose what they typed
 
 There is deliberately no conflict-resolution engine yet. The data layer is
@@ -325,7 +345,7 @@ npm run build     # -> dist/
 npm run preview
 ```
 
-The service worker is only active in a real build — `devOptions.enabled` is false,
+The service worker is only active in a real build: `devOptions.enabled` is false,
 so development isn't fighting a cache.
 
 ---
@@ -350,7 +370,7 @@ Then:
 
 **SPA routing is already handled.** `public/_redirects` ships a
 `/*  /index.html  200` rule, so a hard refresh on a deep link like
-`/track/weight` serves the app rather than a CDN 404. The service worker's
+`/weight` serves the app rather than a CDN 404. The service worker's
 `navigateFallback` covers repeat visits; this rule covers the first one.
 
 ---
@@ -359,23 +379,25 @@ Then:
 
 ```
 src/
-  app/            Providers, router, query client, theme, error boundary, module registry
+  app/            Providers, router, query client, theme, error boundary,
+                  app registry (apps.ts) and surface registry (app-surfaces.ts)
   components/
     ui/           Primitives: button, input, number field, sheet, progress, toggles…
-    common/       Composed pieces: section, metric, empty/error states, chart shell
-    layout/       App shell, bottom nav, sidebar, page header, section tabs
+    common/       Composed pieces: section, metric, summary pill, empty/error states
+    layout/       App shell, bottom nav, sidebar, page header
     form/         React Hook Form bindings for the controlled inputs
   features/
     auth/         Session context, route guard, sign-in and sign-up
-    today/        The home screen
-    weight/       api · hooks · calculations · schema · components · page
+    home/         The launcher
+    today/        The cross-app day view
+    weight/       api · hooks · calculations · schema · components · surfaces · page
     nutrition/    …plus estimate client and schema
     habits/       …
     tasks/        …
     goals/        …
+    music/        …no surfaces: it contributes nothing to Home or Today
     settings/     …
     quick-add/    The central Add sheet and its action registry
-    more/         Phone overflow screen
   hooks/          Cross-feature hooks (media query, online status, interval value)
   lib/            supabase, env, date, units, format, chart, motion, errors, query keys
   styles/         The design tokens and base layer
@@ -423,15 +445,24 @@ why every macro mark carries a visible number rather than relying on colour.
 variants; components pick from them. `prefers-reduced-motion` is honoured globally
 in CSS and per-component for transform-based motion.
 
-**Adding a module.** Add a row to `src/app/modules.ts`, a route in
-`src/app/router.tsx`, and a folder under `src/features/`. Navigation, the More
-screen and the desktop sidebar all read the registry. For a new quick-add action,
-add one entry to `QuickAddAction` and one to `QUICK_ADD_ACTIONS`.
+**Adding an app.** Add a row to `src/app/apps.ts`, a route in
+`src/app/router.tsx`, and a folder under `src/features/`. The launcher, the
+desktop sidebar and every list read that registry, so nothing else needs
+editing. An app can be anything. It doesn't have to track a number, and it
+doesn't have to be about health.
 
-**Room already left for cross-module work.** `goals.metric_key` is reserved for
+Optionally, export `<Name>Summary` and `<Name>Widget` from
+`src/features/<app>/surfaces.tsx` and register them in `src/app/app-surfaces.ts`.
+The summary is a pill on Home, the widget a block on Today. Both are lazy and
+fetch their own data, so Home and Today never import a feature directly and stay
+ignorant of what any app measures. An app with nothing to say renders nothing.
+For a quick-add action, add one entry to `QuickAddAction` and one to
+`QUICK_ADD_ACTIONS`.
+
+**Room already left for cross-app work.** `goals.metric_key` is reserved for
 linking a goal to a tracked metric, `tasks.recurrence` for recurring tasks, and
-every dated row carries a local date so a future analytics layer can join modules
-on the user's own days. None of it is implemented — the point is that none of it
+every dated row carries a local date so a future analytics layer can join apps
+on the user's own days. None of it is implemented; the point is that none of it
 needs a migration.
 
 ---
@@ -444,20 +475,20 @@ npm run test
 
 135 tests across nine files, aimed at logic rather than markup:
 
-- **`lib/date.test.ts`** — timezone boundaries, DST days that are 23 and 25 hours
+- **`lib/date.test.ts`**: timezone boundaries, DST days that are 23 and 25 hours
   long, leap days, week starts, relative labels
-- **`lib/units.test.ts`** — kg/lb/stone conversion, round-tripping, the
+- **`lib/units.test.ts`**: kg/lb/stone conversion, round-tripping, the
   "13 st 14 lb" rollover, delta formatting
-- **`features/weight/calculations.test.ts`** — day averaging, the time-aware
+- **`features/weight/calculations.test.ts`**: day averaging, the time-aware
   smoothing, refusing to report a trend from too little data
-- **`features/habits/calculations.test.ts`** — scheduling, streaks that don't
+- **`features/habits/calculations.test.ts`**: scheduling, streaks that don't
   break because today isn't done yet, completion rates that exclude an open day
-- **`features/nutrition/calculations.test.ts`** — macro totals, progress past
+- **`features/nutrition/calculations.test.ts`**: macro totals, progress past
   100%, zero targets that must not yield `NaN`
-- **`features/tasks/calculations.test.ts`** — bucketing and ordering
-- **`features/goals/calculations.test.ts`** — progress in both directions
-- **`features/nutrition/estimate-schema.test.ts`** — the model-output boundary
-- **`app/App.test.tsx`** — a boot canary: the whole provider stack mounts and
+- **`features/tasks/calculations.test.ts`**: bucketing and ordering
+- **`features/goals/calculations.test.ts`**: progress in both directions
+- **`features/nutrition/estimate-schema.test.ts`**: the model-output boundary
+- **`app/App.test.tsx`**: a boot canary, the whole provider stack mounts and
   resolves to a real screen
 
 ---

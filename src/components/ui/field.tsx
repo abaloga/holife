@@ -22,7 +22,7 @@ export const Label = React.forwardRef<
 
 interface FieldProps {
   label?: React.ReactNode;
-  /** Rendered next to the label — units, optional markers, inline actions. */
+  /** Rendered next to the label: units, optional markers, inline actions. */
   aside?: React.ReactNode;
   hint?: React.ReactNode;
   error?: string;

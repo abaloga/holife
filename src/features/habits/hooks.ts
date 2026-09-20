@@ -59,7 +59,7 @@ export interface HabitView {
   stats: CompletionStats;
   /** Completion since the start of the user's own week. */
   weekStats: CompletionStats;
-  /** Last seven days, oldest first — the dot strip on the habits screen. */
+  /** Last seven days, oldest first: the dot strip on the habits screen. */
   recent: { date: DateKey; scheduled: boolean; completed: boolean }[];
 }
 

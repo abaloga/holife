@@ -7,7 +7,7 @@ export interface NumberFieldProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'type'> {
   value: number | null;
   onValueChange: (value: number | null) => void;
-  /** Rendered inside the field, right-aligned — `kg`, `g`, `kcal`. */
+  /** Rendered inside the field, right-aligned: `kg`, `g`, `kcal`. */
   suffix?: string;
   step?: number;
   min?: number;
