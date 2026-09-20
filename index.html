@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" class="antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Pinch-zoom stays enabled: blocking it fails WCAG 1.4.4, and the reason
+         people block it (iOS zooming on input focus) is already handled by the
+         16px minimum font size on form fields in the base stylesheet. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content="A calm, connected home for your daily habits, food, training and goals." />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0a0a0b" media="(prefers-color-scheme: dark)" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+    <title>HoLife</title>
+    <script>
+      // Applied before first paint so the shell never flashes the wrong theme.
+      (function () {
+        try {
+          var stored = localStorage.getItem('holife.theme');
+          var pref = stored === 'light' || stored === 'dark' ? stored : null;
+          var dark = pref
+            ? pref === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (e) {
+          /* storage unavailable - fall back to the media query in CSS */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
