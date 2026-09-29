@@ -3,18 +3,23 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from '@/features/auth/auth-context';
 import { usePreferences } from '@/features/settings/hooks';
 import { queryKeys } from '@/lib/query-keys';
-import type { DateKey } from '@/lib/date';
+import { addDaysToKey, lastNDays, type DateKey } from '@/lib/date';
+import { round } from '@/lib/utils';
 import {
   createMeal,
   deleteMeal,
   fetchTargets,
   listMealsForDate,
+  listMealsForRange,
   updateMeal,
   updateTargets,
   type MealEntry,
   type MealInput,
 } from './api';
 import { macroProgress, sumMeals, type MacroTotals } from './calculations';
+
+/** How many days of calorie history the Today chart widget shows. */
+export const CALORIE_HISTORY_DAYS = 14;
 
 export function useNutritionTargets() {
   const userId = useUserId();
@@ -121,8 +126,39 @@ export function useDeleteMeal() {
   });
 }
 
-/** The current day's totals, used by Today without duplicating the maths. */
+/** The current day's totals, used by Home without duplicating the maths. */
 export function useTodayNutrition() {
   const { today } = usePreferences();
   return useDayNutrition(today);
+}
+
+/** Daily calorie totals for the Today chart widget: one point per day. */
+export function useCalorieHistory(days = CALORIE_HISTORY_DAYS) {
+  const userId = useUserId();
+  const { today } = usePreferences();
+  const from = addDaysToKey(today, -(days - 1));
+
+  const mealsQuery = useQuery({
+    queryKey: queryKeys.nutrition.range(userId, from, today),
+    queryFn: () => listMealsForRange(userId, from, today),
+  });
+  const targetsQuery = useNutritionTargets();
+
+  const series = useMemo(() => {
+    const totals = new Map<DateKey, number>();
+    for (const meal of mealsQuery.data ?? []) {
+      totals.set(meal.local_date, (totals.get(meal.local_date) ?? 0) + Number(meal.calories));
+    }
+    return lastNDays(today, days).map((date) => ({
+      date,
+      calories: round(totals.get(date) ?? 0, 0),
+    }));
+  }, [mealsQuery.data, today, days]);
+
+  return {
+    series,
+    target: targetsQuery.data?.calories ?? 0,
+    hasData: (mealsQuery.data ?? []).length > 0,
+    isLoading: mealsQuery.isLoading || targetsQuery.isLoading,
+  };
 }

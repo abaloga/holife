@@ -64,6 +64,23 @@ export async function listMealsForDate(userId: string, date: DateKey): Promise<M
   return data ?? [];
 }
 
+export async function listMealsForRange(
+  userId: string,
+  from: DateKey,
+  to: DateKey,
+): Promise<MealEntry[]> {
+  const { data, error } = await supabase
+    .from('meal_entries')
+    .select('*')
+    .eq('user_id', userId)
+    .gte('local_date', from)
+    .lte('local_date', to)
+    .order('local_date', { ascending: true });
+
+  if (error) throw new AppError(toUserMessage(error), error);
+  return data ?? [];
+}
+
 export interface MealInput {
   name: string;
   date: DateKey;

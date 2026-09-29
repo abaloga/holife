@@ -4,7 +4,9 @@ import { cn } from '@/lib/utils';
 interface ChartContainerProps {
   /** Screen-reader description of what the chart shows. */
   label: string;
-  height?: number;
+  /** A fixed pixel height, or `'fill'` to take its parent's height instead
+   * (the parent must constrain it, e.g. with `flex-1 min-h-0`). */
+  height?: number | 'fill';
   className?: string;
   children: React.ReactNode;
 }
@@ -16,12 +18,14 @@ interface ChartContainerProps {
  * present as text nearby.
  */
 export function ChartContainer({ label, height = 200, className, children }: ChartContainerProps) {
+  const fill = height === 'fill';
+
   return (
     <div
       role="img"
       aria-label={label}
-      className={cn('w-full select-none', className)}
-      style={{ height }}
+      className={cn('w-full select-none', fill && 'h-full', className)}
+      style={fill ? undefined : { height }}
     >
       {children}
     </div>

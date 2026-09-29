@@ -18,6 +18,7 @@ import { displayToKg, kgToDisplay, WEIGHT_UNIT_LABELS } from '@/lib/units';
 import { useTheme } from '@/app/theme-provider';
 import { useAuth } from '@/features/auth/auth-context';
 import { signOut } from '@/features/auth/api';
+import { useCountryOptions } from '@/features/holidays/hooks';
 import { usePreferences, useProfile, useUpdateProfile, useUpdateSettings } from './hooks';
 import { SettingRow } from './components/setting-row';
 import type { ThemePreference, UnitSystem, WeightUnit } from '@/types/database';
@@ -44,6 +45,7 @@ export function SettingsPage() {
   const { confirm, confirmElement } = useConfirm();
 
   const timezones = useMemo(supportedTimezones, []);
+  const { countries } = useCountryOptions();
   const [displayName, setDisplayName] = useState<string | null>(null);
   const [goalWeight, setGoalWeight] = useState<number | null>(null);
 
@@ -270,6 +272,29 @@ export function SettingsPage() {
                 {DAY_NAMES.map((name, index) => (
                   <option key={name} value={index}>
                     {name}
+                  </option>
+                ))}
+              </select>
+            </SettingRow>
+
+            <SettingRow
+              label="Country"
+              description="For country-aware features as they land. Today's holidays widget is US-only for now."
+              htmlFor="setting-country"
+              stacked
+            >
+              <select
+                id="setting-country"
+                value={settings.country}
+                onChange={(event) => void patch({ country: event.target.value })}
+                className={cn(inputClassName, 'appearance-none pr-8')}
+              >
+                {!countries.some((country) => country.countryCode === settings.country) && (
+                  <option value={settings.country}>{settings.country}</option>
+                )}
+                {countries.map((country) => (
+                  <option key={country.countryCode} value={country.countryCode}>
+                    {country.name}
                   </option>
                 ))}
               </select>

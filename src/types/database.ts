@@ -54,6 +54,7 @@ export interface Database {
           timezone: string;
           week_start_day: number;
           goal_weight_kg: number | null;
+          country: string;
           created_at: string;
           updated_at: string;
         };
@@ -65,6 +66,7 @@ export interface Database {
           timezone?: string;
           week_start_day?: number;
           goal_weight_kg?: number | null;
+          country?: string;
         };
         Update: {
           unit_system?: UnitSystem;
@@ -73,6 +75,7 @@ export interface Database {
           timezone?: string;
           week_start_day?: number;
           goal_weight_kg?: number | null;
+          country?: string;
           updated_at?: string;
         };
         Relationships: [];
@@ -379,6 +382,26 @@ export interface Database {
           release_year?: number | null;
           notes?: string | null;
           updated_at?: string;
+        };
+        Relationships: [];
+      };
+      dashboard_widgets: {
+        Row: {
+          id: string;
+          user_id: string;
+          widget_key: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          widget_key: string;
+          sort_order?: number;
+        };
+        Update: {
+          widget_key?: string;
+          sort_order?: number;
         };
         Relationships: [];
       };

@@ -25,6 +25,7 @@ interface WeightChartProps {
   /** Days of history to show; `null` shows everything. */
   rangeDays: number | null;
   today: DateKey;
+  height?: number | 'fill';
 }
 
 /**
@@ -32,7 +33,14 @@ interface WeightChartProps {
  * behind it. That ordering is the whole point: a day's reading is noise, and
  * drawing it as the primary line would invite the user to read noise as change.
  */
-export function WeightChart({ points, unit, goalWeightKg, rangeDays, today }: WeightChartProps) {
+export function WeightChart({
+  points,
+  unit,
+  goalWeightKg,
+  rangeDays,
+  today,
+  height = 208,
+}: WeightChartProps) {
   const data = useMemo(() => {
     const cutoff = rangeDays == null ? null : addDaysToKey(today, -rangeDays);
     const visible = cutoff ? points.filter((point) => point.date >= cutoff) : points;
@@ -87,7 +95,7 @@ export function WeightChart({ points, unit, goalWeightKg, rangeDays, today }: We
 
   return (
     <ChartContainer
-      height={208}
+      height={height}
       label={`Weight trend over the ${rangeDays ? `last ${rangeDays} days` : 'full history'}`}
     >
       <ResponsiveContainer width="100%" height="100%">

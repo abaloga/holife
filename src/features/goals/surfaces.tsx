@@ -1,13 +1,12 @@
-import { useNavigate } from 'react-router-dom';
 import { Flag } from 'lucide-react';
-import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
 import { SummaryPill } from '@/components/common/summary-pill';
-import { usePreferences } from '@/features/settings/hooks';
 import { useGoals } from './hooks';
-import { GoalCard } from './components/goal-card';
+import { goalProgress } from './calculations';
+import { GoalsProgressChart } from './components/goals-progress-chart';
 
-const FEATURED_LIMIT = 2;
+/** Bars stop being legible in a small square past this many goals. */
+const GOALS_SHOWN = 4;
 
 export function GoalsSummary() {
   const { active, isLoading } = useGoals();
@@ -24,39 +23,31 @@ export function GoalsSummary() {
   );
 }
 
-export function GoalsWidget() {
-  const { today } = usePreferences();
+/** Today's chart widget: progress bars across goals, not the goal list itself. */
+export function GoalsProgressWidget() {
   const { active, goals, isLoading } = useGoals();
-  const navigate = useNavigate();
 
   if (isLoading) return null;
 
-  return (
-    <Section>
-      <SectionHeader
-        title="Goals"
-        to="/goals"
-        meta={active.length > FEATURED_LIMIT ? `${active.length} active` : undefined}
+  const quantitative = active.flatMap((goal) => {
+    const progress = goalProgress(goal);
+    return progress == null ? [] : [{ id: goal.id, title: goal.title, progress }];
+  });
+
+  if (quantitative.length === 0) {
+    return (
+      <EmptyState
+        icon={Flag}
+        size="compact"
+        title={goals.length === 0 ? 'No goals set' : 'Nothing to chart yet'}
+        description={
+          goals.length === 0
+            ? 'Name what all of this is actually for.'
+            : 'Give a goal a target and current value to chart its progress.'
+        }
       />
-      {active.length === 0 ? (
-        <EmptyState
-          icon={Flag}
-          size="compact"
-          title={goals.length === 0 ? 'No goals set' : 'Nothing in progress'}
-          description="Name what all of this is actually for."
-        />
-      ) : (
-        <div className="space-y-3">
-          {active.slice(0, FEATURED_LIMIT).map((goal) => (
-            <GoalCard
-              key={goal.id}
-              goal={goal}
-              today={today}
-              onSelect={() => navigate('/goals')}
-            />
-          ))}
-        </div>
-      )}
-    </Section>
-  );
+    );
+  }
+
+  return <GoalsProgressChart goals={quantitative.slice(0, GOALS_SHOWN)} height="fill" />;
 }

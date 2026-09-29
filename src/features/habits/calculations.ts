@@ -112,6 +112,59 @@ export function completionStats(
   return { scheduled, completed, rate: scheduled === 0 ? null : completed / scheduled };
 }
 
+/** Groups raw completion rows by habit, for fast per-day lookups. */
+export function groupCompletionsByHabit(
+  completions: { habit_id: string; local_date: DateKey }[],
+): Map<string, Set<DateKey>> {
+  const map = new Map<string, Set<DateKey>>();
+  for (const completion of completions) {
+    const set = map.get(completion.habit_id) ?? new Set<DateKey>();
+    set.add(completion.local_date);
+    map.set(completion.habit_id, set);
+  }
+  return map;
+}
+
+export interface DailyCompletion {
+  date: DateKey;
+  /** Active habits scheduled on this day. */
+  scheduled: number;
+  completed: number;
+  /** 0–1, or null when nothing was scheduled that day. */
+  rate: number | null;
+}
+
+/**
+ * One point per day in `[from, to]`: how many scheduled habits were completed
+ * that day, aggregated across every active habit. Used by the Today chart
+ * widget, where the question is "was I consistent", not any one habit's streak.
+ */
+export function dailyCompletionSeries(
+  habits: (ScheduledHabit & { id: string; isActive: boolean })[],
+  completedDatesByHabit: ReadonlyMap<string, ReadonlySet<DateKey>>,
+  from: DateKey,
+  to: DateKey,
+): DailyCompletion[] {
+  const points: DailyCompletion[] = [];
+  let cursor = from;
+
+  while (cursor <= to) {
+    let scheduled = 0;
+    let completed = 0;
+
+    for (const habit of habits) {
+      if (!habit.isActive || !isScheduledOn(habit, cursor)) continue;
+      scheduled += 1;
+      if (completedDatesByHabit.get(habit.id)?.has(cursor)) completed += 1;
+    }
+
+    points.push({ date: cursor, scheduled, completed, rate: scheduled === 0 ? null : completed / scheduled });
+    cursor = addDaysToKey(cursor, 1);
+  }
+
+  return points;
+}
+
 /** Human description of a habit's schedule: "Every day", "Mon, Wed, Fri". */
 export function describeSchedule(
   habit: Pick<ScheduledHabit, 'frequency' | 'days_of_week'>,

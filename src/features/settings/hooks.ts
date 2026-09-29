@@ -58,6 +58,8 @@ export interface Preferences {
   weightUnit: UserSettings['weight_unit'];
   weekStartDay: number;
   goalWeightKg: number | null;
+  /** ISO 3166-1 alpha-2 country code. Defaults to US so signup needs no choice. */
+  country: string;
   /** The user's current calendar day. Rolls over without a reload. */
   today: DateKey;
   isLoading: boolean;
@@ -81,6 +83,7 @@ export function usePreferences(): Preferences {
     weightUnit: settings?.weight_unit ?? 'kg',
     weekStartDay: settings?.week_start_day ?? 1,
     goalWeightKg: settings?.goal_weight_kg ?? null,
+    country: settings?.country ?? 'US',
     today,
     isLoading,
   };

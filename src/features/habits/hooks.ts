@@ -19,11 +19,16 @@ import {
 import {
   completionStats,
   currentStreak,
+  dailyCompletionSeries,
+  groupCompletionsByHabit,
   isScheduledOn,
   longestStreak,
   type CompletionStats,
   type ScheduledHabit,
 } from './calculations';
+
+/** How many days of consistency history the Today chart widget shows. */
+export const HABIT_CONSISTENCY_DAYS = 14;
 
 /** The rolling window every habit screen reads from. */
 function historyWindow(today: DateKey) {
@@ -76,15 +81,10 @@ export function useHabitsOverview() {
   const habitsQuery = useHabits();
   const completionsQuery = useHabitCompletions();
 
-  const completionsByHabit = useMemo(() => {
-    const map = new Map<string, Set<DateKey>>();
-    for (const completion of completionsQuery.data ?? []) {
-      const set = map.get(completion.habit_id) ?? new Set<DateKey>();
-      set.add(completion.local_date);
-      map.set(completion.habit_id, set);
-    }
-    return map;
-  }, [completionsQuery.data]);
+  const completionsByHabit = useMemo(
+    () => groupCompletionsByHabit(completionsQuery.data ?? []),
+    [completionsQuery.data],
+  );
 
   const views = useMemo<HabitView[]>(() => {
     const habits = habitsQuery.data ?? [];
@@ -124,6 +124,33 @@ export function useHabitsOverview() {
       void habitsQuery.refetch();
       void completionsQuery.refetch();
     },
+  };
+}
+
+/** Daily completion rate across all habits, for the Today chart widget. */
+export function useHabitsConsistency(days = HABIT_CONSISTENCY_DAYS) {
+  const { today, timezone } = usePreferences();
+  const habitsQuery = useHabits();
+  const completionsQuery = useHabitCompletions();
+
+  const completionsByHabit = useMemo(
+    () => groupCompletionsByHabit(completionsQuery.data ?? []),
+    [completionsQuery.data],
+  );
+
+  const series = useMemo(() => {
+    const habits = (habitsQuery.data ?? []).map((habit) => ({
+      ...toScheduled(habit, timezone),
+      id: habit.id,
+      isActive: habit.is_active,
+    }));
+    return dailyCompletionSeries(habits, completionsByHabit, addDaysToKey(today, -(days - 1)), today);
+  }, [habitsQuery.data, completionsByHabit, today, timezone, days]);
+
+  return {
+    series,
+    hasHabits: (habitsQuery.data ?? []).length > 0,
+    isLoading: habitsQuery.isLoading || completionsQuery.isLoading,
   };
 }
 

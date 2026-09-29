@@ -1,12 +1,9 @@
 import { CalendarCheck } from 'lucide-react';
-import { Section, SectionHeader } from '@/components/common/section';
 import { EmptyState } from '@/components/common/empty-state';
-import { ListGroup } from '@/components/common/list-row';
 import { SummaryPill } from '@/components/common/summary-pill';
-import { usePreferences } from '@/features/settings/hooks';
-import { useQuickAdd } from '@/features/quick-add/quick-add-context';
-import { useHabitsOverview, useToggleHabit } from './hooks';
-import { HabitRow } from './components/habit-row';
+import { formatPercent } from '@/lib/format';
+import { useHabitsConsistency, useHabitsOverview } from './hooks';
+import { HabitConsistencyChart } from './components/habit-consistency-chart';
 
 export function HabitsSummary() {
   const { todayViews, isLoading } = useHabitsOverview();
@@ -26,53 +23,37 @@ export function HabitsSummary() {
   );
 }
 
-export function HabitsWidget() {
-  const { today } = usePreferences();
-  const { views, todayViews, isLoading } = useHabitsOverview();
-  const toggle = useToggleHabit();
-  const { open } = useQuickAdd();
+/** Today's chart widget: consistency across days, not a checklist for today. */
+export function HabitsConsistencyWidget() {
+  const { series, hasHabits, isLoading } = useHabitsConsistency();
 
   if (isLoading) return null;
 
-  const done = todayViews.filter((view) => view.completedToday).length;
+  if (!hasHabits) {
+    return (
+      <EmptyState
+        icon={CalendarCheck}
+        size="compact"
+        title="No habits yet"
+        description="Pick one thing you want to do consistently and its record shows up here."
+      />
+    );
+  }
+
+  const scheduled = series.reduce((sum, day) => sum + day.scheduled, 0);
+  const completed = series.reduce((sum, day) => sum + day.completed, 0);
+  const overallRate = scheduled === 0 ? null : completed / scheduled;
 
   return (
-    <Section>
-      <SectionHeader
-        title="Habits"
-        to="/habits"
-        meta={todayViews.length > 0 ? `${done}/${todayViews.length}` : undefined}
-      />
-      {todayViews.length === 0 ? (
-        <EmptyState
-          icon={CalendarCheck}
-          size="compact"
-          title={views.length === 0 ? 'No habits yet' : 'Nothing scheduled today'}
-          description={
-            views.length === 0
-              ? 'Pick one thing you want to do consistently.'
-              : 'None of your habits fall on today.'
-          }
-          action={
-            views.length === 0
-              ? { label: 'Create a habit', onClick: () => open('habit') }
-              : undefined
-          }
-        />
-      ) : (
-        <ListGroup>
-          {todayViews.map((view) => (
-            <HabitRow
-              key={view.habit.id}
-              view={view}
-              compact
-              onToggle={(completed) =>
-                toggle.mutate({ habitId: view.habit.id, date: today, completed })
-              }
-            />
-          ))}
-        </ListGroup>
-      )}
-    </Section>
+    <div className="flex h-full flex-col">
+      <p className="mb-1.5 shrink-0 truncate text-[0.6875rem] text-muted-foreground">
+        {overallRate == null
+          ? 'Nothing scheduled yet'
+          : `${formatPercent(overallRate)} over ${series.length} days`}
+      </p>
+      <div className="min-h-0 flex-1">
+        <HabitConsistencyChart series={series} height="fill" />
+      </div>
+    </div>
   );
 }

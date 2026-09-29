@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useUserId } from '@/features/auth/auth-context';
 import { usePreferences } from '@/features/settings/hooks';
 import { queryKeys } from '@/lib/query-keys';
+import { lastNDays, toDateKey, type DateKey } from '@/lib/date';
 import {
   createTask,
   deleteTask,
@@ -13,6 +14,9 @@ import {
   type TaskInput,
 } from './api';
 import { groupTasks } from './calculations';
+
+/** How many days of throughput history the Today chart widget shows. */
+export const TASKS_THROUGHPUT_DAYS = 14;
 
 export function useTasks() {
   const userId = useUserId();
@@ -35,6 +39,28 @@ export function useGroupedTasks() {
     isError: query.isError,
     error: query.error,
     refetch: query.refetch,
+  };
+}
+
+/** Tasks completed per day, for the Today chart widget. */
+export function useTasksThroughput(days = TASKS_THROUGHPUT_DAYS) {
+  const { today, timezone } = usePreferences();
+  const { tasks, isLoading } = useGroupedTasks();
+
+  const series = useMemo(() => {
+    const counts = new Map<DateKey, number>();
+    for (const task of tasks) {
+      if (!task.is_completed || !task.completed_at) continue;
+      const date = toDateKey(task.completed_at, timezone);
+      counts.set(date, (counts.get(date) ?? 0) + 1);
+    }
+    return lastNDays(today, days).map((date) => ({ date, completed: counts.get(date) ?? 0 }));
+  }, [tasks, today, timezone, days]);
+
+  return {
+    series,
+    hasCompleted: tasks.some((task) => task.is_completed),
+    isLoading,
   };
 }
 

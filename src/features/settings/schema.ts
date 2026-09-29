@@ -11,6 +11,7 @@ export const userSettingsSchema = z.object({
   timezone: z.string().refine(isValidTimezone, 'Unknown timezone'),
   week_start_day: z.number().int().min(0).max(6),
   goal_weight_kg: z.number().positive().nullable(),
+  country: z.string().length(2),
   created_at: z.string(),
   updated_at: z.string(),
 });

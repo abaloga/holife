@@ -20,6 +20,8 @@ export const queryKeys = {
     root: (userId: string) => ['nutrition', userId] as const,
     targets: (userId: string) => ['nutrition', userId, 'targets'] as const,
     day: (userId: string, date: DateKey) => ['nutrition', userId, 'day', date] as const,
+    range: (userId: string, from: DateKey, to: DateKey) =>
+      ['nutrition', userId, 'range', from, to] as const,
   },
 
   habits: {
@@ -42,6 +44,17 @@ export const queryKeys = {
   music: {
     root: (userId: string) => ['music', userId] as const,
     list: (userId: string) => ['music', userId, 'list'] as const,
+  },
+
+  dashboardWidgets: {
+    root: (userId: string) => ['dashboardWidgets', userId] as const,
+    list: (userId: string) => ['dashboardWidgets', userId, 'list'] as const,
+  },
+
+  holidays: {
+    day: (date: DateKey, timezone: string) => ['holidays', 'day', date, timezone] as const,
+    countries: ['holidays', 'countries'] as const,
+    onThisDay: (month: number, day: number) => ['holidays', 'onThisDay', month, day] as const,
   },
 } as const;
 
